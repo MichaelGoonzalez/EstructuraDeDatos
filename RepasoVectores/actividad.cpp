@@ -1,35 +1,34 @@
 #include <iostream>
-#include <vector>
 #include <cmath>
 #include <algorithm>
 
 using namespace std;
 
-// Función para llenar un vector
-void llenarVector(vector<int> &v, int n) {
-    v.resize(n);
+// Función para llenar un vector dinámico
+template <typename T>
+void llenarVector(T *arr, int n) {
     for (int i = 0; i < n; i++) {
-        cout << "Ingrese un numero: ";
-        cin >> v[i];
+        cout << "Ingrese un número: ";
+        cin >> *(arr + i);
     }
 }
 
 // 1. Calcular el promedio de los números
-float calcularPromedio(const vector<int> &v) {
+float calcularPromedio(int *arr, int n) {
     int suma = 0;
-    for (int num : v) {
-        suma += num;
+    for (int i = 0; i < n; i++) {
+        suma += *(arr + i);
     }
-    return static_cast<float>(suma) / v.size();
+    return static_cast<float>(suma) / n;
 }
 
 // 2. Producto de números mayores a 100
-long long productoMayores100(const vector<int> &v) {
+long long productoMayores100(int *arr, int n) {
     long long producto = 1;
     bool encontrado = false;
-    for (int num : v) {
-        if (num > 100) {
-            producto *= num;
+    for (int i = 0; i < n; i++) {
+        if (*(arr + i) > 100) {
+            producto *= *(arr + i);
             encontrado = true;
         }
     }
@@ -37,9 +36,10 @@ long long productoMayores100(const vector<int> &v) {
 }
 
 // 3. Contar números que terminan en 4, inician en 5 y tienen 3 dígitos
-int contarNumeros(const vector<int> &v) {
+int contarNumeros(int *arr, int n) {
     int contador = 0;
-    for (int num : v) {
+    for (int i = 0; i < n; i++) {
+        int num = *(arr + i);
         if (num >= 100 && num <= 999 && num % 10 == 4 && to_string(num)[0] == '5') {
             contador++;
         }
@@ -56,10 +56,10 @@ bool esPrimo(int num) {
     return true;
 }
 
-int contarPrimos(const vector<int> &v) {
+int contarPrimos(int *arr, int n) {
     int contador = 0;
-    for (int num : v) {
-        if (esPrimo(num)) contador++;
+    for (int i = 0; i < n; i++) {
+        if (esPrimo(*(arr + i))) contador++;
     }
     return contador;
 }
@@ -74,30 +74,33 @@ int sumaDigitos(int num) {
     return suma;
 }
 
-void mostrarMultiplosDe3(const vector<int> &v) {
-    for (int num : v) {
-        if (sumaDigitos(num) % 3 == 0) {
-            cout << num << " ";
+void mostrarMultiplosDe3(int *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        if (sumaDigitos(*(arr + i)) % 3 == 0) {
+            cout << *(arr + i) << " ";
         }
     }
     cout << endl;
 }
 
 // 6. Calcular la norma de un vector
-double calcularNorma(const vector<int> &v) {
+double calcularNorma(int *arr, int n) {
     double suma = 0;
-    for (int num : v) {
-        suma += num * num;
+    for (int i = 0; i < n; i++) {
+        suma += (*(arr + i)) * (*(arr + i));
     }
     return sqrt(suma);
 }
 
-// 7. Comparar si tres vectores son iguales
-bool sonVectoresIguales(const vector<int> &v1, const vector<int> &v2, const vector<int> &v3) {
-    return v1 == v2 && v2 == v3;
+// 7. Comparar tres vectores
+bool sonIguales(int *a, int *b, int *c, int n) {
+    for (int i = 0; i < n; i++) {
+        if (a[i] != b[i] || a[i] != c[i]) return false;
+    }
+    return true;
 }
 
-// 8. Encontrar números perfectos
+// 8. Números perfectos
 bool esPerfecto(int num) {
     int suma = 0;
     for (int i = 1; i < num; i++) {
@@ -106,96 +109,89 @@ bool esPerfecto(int num) {
     return suma == num;
 }
 
-void mostrarPerfectos(const vector<int> &v) {
-    for (int num : v) {
-        if (esPerfecto(num)) cout << num << " ";
+void mostrarPerfectos(int *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        if (esPerfecto(*(arr + i))) cout << *(arr + i) << " ";
     }
     cout << endl;
 }
 
 // 9. Factorial de cada número
 long long factorial(int num) {
-    long long resultado = 1;
-    for (int i = 2; i <= num; i++) {
-        resultado *= i;
-    }
-    return resultado;
+    return (num <= 1) ? 1 : num * factorial(num - 1);
 }
 
-void mostrarFactoriales(const vector<int> &v) {
-    for (int num : v) {
-        cout << "Factorial de " << num << " es " << factorial(num) << endl;
+void mostrarFactoriales(int *arr, int n) {
+    for (int i = 0; i < n; i++) {
+        cout << "Factorial de " << *(arr + i) << " es " << factorial(*(arr + i)) << endl;
     }
 }
 
 // 10. Encontrar el menor número en un vector
-int encontrarMinimo(const vector<int> &v) {
-    return *min_element(v.begin(), v.end());
+int encontrarMinimo(int *arr, int n) {
+    return *min_element(arr, arr + n);
 }
 
-// 11. Encontrar el mayor número primo en un vector
-int mayorPrimo(const vector<int> &v) {
+// 11. Encontrar el número primo más grande
+int mayorPrimo(int *arr, int n) {
     int maxPrimo = -1;
-    for (int num : v) {
-        if (esPrimo(num) && num > maxPrimo) maxPrimo = num;
+    for (int i = 0; i < n; i++) {
+        if (esPrimo(*(arr + i)) && *(arr + i) > maxPrimo) maxPrimo = *(arr + i);
     }
     return maxPrimo;
 }
 
 // 12. Imprimir el vector en orden inverso
-void imprimirReverso(const vector<int> &v) {
-    for (auto it = v.rbegin(); it != v.rend(); ++it) {
-        cout << *it << " ";
+void imprimirReverso(int *arr, int n) {
+    for (int i = n - 1; i >= 0; i--) {
+        cout << *(arr + i) << " ";
     }
     cout << endl;
 }
 
-// 13. Retornar un vector con los m primeros factoriales
-vector<long long> primerosFactoriales(int m) {
-    vector<long long> fact(m);
-    for (int i = 0; i < m; i++) {
-        fact[i] = factorial(i + 1);
+// 13. Generar los primeros m factoriales
+void primerosFactoriales(int m) {
+    for (int i = 1; i <= m; i++) {
+        cout << factorial(i) << " ";
     }
-    return fact;
+    cout << endl;
 }
 
-// 14. Ordenar 10 números ingresados
-void ordenarNumeros(vector<int> &v) {
-    sort(v.begin(), v.end());
+// 14. Ordenar 10 números
+void ordenarVector(int *arr, int n) {
+    sort(arr, arr + n);
 }
 
 // Programa principal con menú
 int main() {
-    vector<int> v;
+    int *v;
     int opcion, n;
     do {
         cout << "\nMENU:\n";
-        cout << "1-14. Seleccionar una opcion del problema\n";
-        cout << "0. Salir\n";
-        cout << "Ingrese una opcion: ";
+        cout << "Ingrese una opción (1-14), 0 para salir: ";
         cin >> opcion;
-        
         if (opcion == 0) break;
         cout << "Ingrese tamaño del vector: ";
         cin >> n;
+        v = new int[n];
         llenarVector(v, n);
-        
         switch (opcion) {
-            case 1: cout << calcularPromedio(v) << endl; break;
-            case 2: cout << productoMayores100(v) << endl; break;
-            case 3: cout << contarNumeros(v) << endl; break;
-            case 4: cout << contarPrimos(v) << endl; break;
-            case 5: mostrarMultiplosDe3(v); break;
-            case 6: cout << calcularNorma(v) << endl; break;
-            case 7: cout << "No implementado en menú" << endl; break;
-            case 8: mostrarPerfectos(v); break;
-            case 9: mostrarFactoriales(v); break;
-            case 10: cout << encontrarMinimo(v) << endl; break;
-            case 11: cout << mayorPrimo(v) << endl; break;
-            case 12: imprimirReverso(v); break;
-            case 13: cout << "Ingrese m: "; cin >> n; primerosFactoriales(n); break;
-            case 14: ordenarNumeros(v); break;
+            case 1: cout << calcularPromedio(v, n) << endl; break;
+            case 2: cout << productoMayores100(v, n) << endl; break;
+            case 3: cout << contarNumeros(v, n) << endl; break;
+            case 4: cout << contarPrimos(v, n) << endl; break;
+            case 5: mostrarMultiplosDe3(v, n); break;
+            case 6: cout << calcularNorma(v, n) << endl; break;
+            case 7: cout << (sonIguales(v, v, v, n) ? "Son iguales" : "No son iguales") << endl; break;
+            case 8: mostrarPerfectos(v, n); break;
+            case 9: mostrarFactoriales(v, n); break;
+            case 10: cout << encontrarMinimo(v, n) << endl; break;
+            case 11: cout << mayorPrimo(v, n) << endl; break;
+            case 12: imprimirReverso(v, n); break;
+            case 13: primerosFactoriales(n); break;
+            case 14: ordenarVector(v, n); break;
         }
+        delete[] v;
     } while (opcion != 0);
     return 0;
 }
